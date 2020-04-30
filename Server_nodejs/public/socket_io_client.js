@@ -4,6 +4,11 @@ const socketDownlink = io.connect('http://localhost/downlink')
 let appId
 let isUpdating
 
+socketDownlink.on('disconnect', (_) => {
+  console.log('socket disconnected')
+  isUpdating = false
+})
+
 function button1() {
   appId = $.trim($('#appId').val())
   console.log(`app id ${appId}`)

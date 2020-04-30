@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:http/http.dart' as http;
+import 'package:socket_io_test/socketio_bloc.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    sBloc = SocketIobloc(appId: 'app1');
+    return SocketIoBlocsProvider(
+      sBloc: sBloc,
+      child: MaterialApp(
+        title: 'Flutter Socket IO',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Flutter Socket IO'),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -25,39 +28,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  IO.Socket socket;
   int _counter = 0;
-  void _pushButtonCallback() {
-    this.socket.emit('test');
+  SocketIobloc sbloc;
 
+  void _pushButtonCallback() {
+    sBloc.sendUpdate();
     setState(() {
       _counter++;
     });
   }
 
-  void initSocketIo() {
-    this.socket = IO.io(
-      'http://10.0.2.2:80',
-      <String, dynamic>{
-        'transports': ['websocket'],
-      },
-    );
-
-    this.socket.on('connect', (_) {
-      print('connect');
-      this.socket.on("news", (data) => print(data));
-      this.socket.emit('test', 'test data');
-    });
-
-    this.socket.on('event', (data) => print(data));
-    this.socket.on('disconnect', (_) => print('disconnect'));
-    this.socket.on('fromServer', (_) => print(_));
-  }
-
   @override
   Widget build(BuildContext context) {
-    this.initSocketIo();
-
+    this.sbloc = SocketIoBlocsProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -67,8 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Update(s) sent to the server via Socket.io',
             ),
+            Container(height: 10),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,

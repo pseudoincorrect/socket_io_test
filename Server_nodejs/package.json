@@ -4,7 +4,7 @@
   "description": "socket io test project",
   "main": "index.js",
   "scripts": {
-    "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
+    "start": "node --inspect=5859 -r ts-node/register ./src/index.ts",
     "start:watch": "nodemon",
     "build": "tsc"
   },

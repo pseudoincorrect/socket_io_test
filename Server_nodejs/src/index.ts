@@ -21,7 +21,7 @@ setInterval(() => {
   for (const room in rooms) {
     if (rooms.hasOwnProperty(room)) {
       if (!room.includes('downlink')) {
-        io.of('/downlink').in(room).emit('update', [room, 'salut'])
+        io.of('/downlink').in(room).emit('update', `room: ${room}: salut`)
       }
     }
   }
@@ -54,9 +54,19 @@ function joinRoom(socket: socketio.Socket, appId: string) {
 //////////////////////////////////////////////////////////
 
 downlinkNsp.on('connection', (socket: socketio.Socket) => {
+  console.log('in connection callback');
+  
+  socket.emit('connected', `socket connected to "/downlink", id: ${socket.id}`)
   socket.on('joinRoom', (appId: string) => {
     joinRoom(socket, appId)
   })
+  socket.on('flutterButton', (event) => console.log(event));
 })
 
 //////////////////////////////////////////////////////////
+
+io.on('connection', (socket: socketio.Socket) => {
+  socket.emit('connected', `socket connected to "/", id: ${socket.id}`)
+  socket.on('button',(data) => { console.log('button has been pushed in flutter app');
+  })
+})
