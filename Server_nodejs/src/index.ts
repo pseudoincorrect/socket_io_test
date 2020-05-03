@@ -6,8 +6,8 @@ import * as Http from 'http'
 
 const app = express()
 const server = new Http.Server(app)
-const io = socketio(server)
-server.listen(80)
+const io = socketio.listen(server)
+server.listen(3000)
 const downlinkNsp = io.of('/downlink')
 
 //////////////////////////////////////////////////////////

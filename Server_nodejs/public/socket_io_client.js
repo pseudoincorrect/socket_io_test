@@ -1,5 +1,7 @@
-const socket = io.connect('http://localhost')
-const socketDownlink = io.connect('http://localhost/downlink')
+const host = '192.168.136.129:3000'
+// const host = 'localhost:3000'
+const socket = io.connect(`http://${host}`)
+const socketDownlink = io.connect(`http://${host}/downlink`)
 
 let appId
 let isUpdating
