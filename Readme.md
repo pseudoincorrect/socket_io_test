@@ -2,4 +2,4 @@ Little test project to play around with socketio, express, typescript and flutte
 
 Not an actual real project.
 
-This code will be used in a bigger project.
+This code is used in a bigger project, mainly to pass notifications to a group of listeners.
